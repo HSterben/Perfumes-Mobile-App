@@ -52,7 +52,8 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      body: ListView.builder(
+      body:
+      ListView.builder(
         itemCount: perfumes.length,
         itemBuilder: (context, index) {
           return Card(

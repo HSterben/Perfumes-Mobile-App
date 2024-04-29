@@ -145,10 +145,6 @@ class _MyHomePageADDState extends State<MyHomePageADD> {
                 },
               ),
             ),
-            Text(
-              "HELLO HELLO",
-              style: TextStyle(color: Colors.black, fontSize: 20),
-            ),
           ],
         ),
       ),
