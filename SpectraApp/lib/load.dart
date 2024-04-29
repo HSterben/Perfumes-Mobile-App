@@ -27,9 +27,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
     super.initState();
-    // Schedule the onboarding screen after a delay
     Future.delayed(Duration(seconds: 3), () {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage())); // Replace with your next screen
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
     });
   }
 
@@ -75,24 +74,9 @@ class _LoadingScreenState extends State<LoadingScreen> {
                   fontSize: 16,
                 ),
               ),
-              // You can add a loading indicator if you want
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class NextScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Next Screen'),
-      ),
-      body: Center(
-        child: Text('This is the next screen'),
       ),
     );
   }

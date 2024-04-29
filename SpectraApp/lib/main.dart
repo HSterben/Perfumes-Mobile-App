@@ -2,19 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:spectraapp/order.dart';
 import 'add.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Spectra Perfume',
-      home: LoginPage(),
-    );
-  }
-}
 
 class LoginPage extends StatefulWidget {
   @override
@@ -68,9 +55,6 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         ),
-        ElevatedButton(onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => MyAppADD()));
-        }, child: Text("Testing this")),
         Container(
           margin: EdgeInsets.only(top: 50, right: 10, left: 10),
           decoration: BoxDecoration(

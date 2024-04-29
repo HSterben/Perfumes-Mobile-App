@@ -44,6 +44,12 @@ class DBHelper {
         $columnImageUrl TEXT NOT NULL,
         $columnQuantity INTEGER NOT NULL
       )
+      
+      CREATE TABLE user_table (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      email TEXT NOT NULL UNIQUE,
+      password TEXT NOT NULL
+    )
     ''');
   }
 
@@ -88,4 +94,20 @@ class DBHelper {
     Database? db = await instance.database;
     return await db?.delete(table, where: '$columnId = ?', whereArgs: [id]);
   }
+
+  Future<int?> registerUser(String email, String password) async {
+    Database? db = await instance.database;
+    return await db?.insert('user_table', {
+      'email': email,
+      'password': password, // In a real app, password should be hashed
+    });
+  }
+
+  Future<bool> checkUser(String email, String password) async {
+    Database? db = await instance.database;
+    List<Map> result = await db?.query('user_table',
+        where: 'email = ? AND password = ?', whereArgs: [email, password]) ?? [];
+    return result.isNotEmpty;
+  }
+
 }

@@ -6,6 +6,9 @@
       <excludeFolder url="file://$MODULE_DIR$/SpectraApp/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/SpectraApp/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/SpectraApp/build" />
+      <excludeFolder url="file://$MODULE_DIR$/Dart Files (USE THIS)/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/Dart Files (USE THIS)/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/Dart Files (USE THIS)/build" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

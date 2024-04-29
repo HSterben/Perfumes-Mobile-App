@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dbhelper.dart';
 import 'perfume.dart';
 import 'add.dart';
+import 'update.dart';
+import 'read.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -38,8 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 context,
                 MaterialPageRoute(builder: (context) => MyHomePageADD()),
               ).then((_) {
-                // This will be triggered when Navigator.pop() is called from MyHomePageADD
-                _queryAll(); // Refresh the list after adding a new perfume
+                _queryAll();
               });
             },
           ),
@@ -47,7 +48,6 @@ class _MyHomePageState extends State<MyHomePage> {
           IconButton(
             icon: Icon(Icons.shopping_cart_outlined),
             onPressed: () {
-              // Handle cart action
             },
           ),
         ],
@@ -57,15 +57,26 @@ class _MyHomePageState extends State<MyHomePage> {
         itemCount: perfumes.length,
         itemBuilder: (context, index) {
           return Card(
-            child: ListTile(
-              leading: Image.network(perfumes[index].imageUrl), // Assuming imageUrl is a network path
-              title: Text('${perfumes[index].brand} ${perfumes[index].name}'),
-              subtitle: Text('${perfumes[index].perfumeNumber}'),
-              trailing: Text('\$${perfumes[index].price?.toStringAsFixed(2)}'),
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DetailedScreen(perfume: perfumes[index]),
+                  ),
+                );
+              },
+              child: ListTile(
+                leading: Image.network(perfumes[index].imageUrl, width: 75, height: 75),
+                title: Text('${perfumes[index].brand} ${perfumes[index].name}'),
+                subtitle: Text('${perfumes[index].perfumeNumber}'),
+                trailing: Text('\$${perfumes[index].price?.toStringAsFixed(2)}'),
+              ),
             ),
           );
         },
       ),
+
     );
   }
 }
