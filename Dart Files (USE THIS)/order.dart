@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dbhelper.dart';
 import 'perfume.dart';
 import 'add.dart';
+import 'view_perfume.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -52,16 +53,44 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      body: ListView.builder(
+      body: ListView.separated(
         itemCount: perfumes.length,
+        separatorBuilder: (context, index) => Divider(color: Colors.grey),
         itemBuilder: (context, index) {
-          return Card(
-            child: ListTile(
-              leading: Image.network(perfumes[index].imageUrl), // Assuming imageUrl is a network path
-              title: Text('${perfumes[index].brand} ${perfumes[index].name}'),
-              subtitle: Text('${perfumes[index].perfumeNumber}'),
-              trailing: Text('\$${perfumes[index].price?.toStringAsFixed(2)}'),
+          return ListTile(
+            // leading: Image.network(
+            //   perfumes[index].imageUrl,
+            //   width: 20,
+            //   height: 20,
+            //   fit: BoxFit.cover,
+            // ),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${perfumes[index].brand} ${perfumes[index].name}',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text('${perfumes[index].perfumeNumber}'),
+                    ],
+                  ),
+                ),
+                Text(
+                  '\$${perfumes[index].price?.toStringAsFixed(2)}',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ],
             ),
+            onTap: () {
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => ViewProductPage(perfume: perfumes[index])),
+              // );
+            },
           );
         },
       ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:spectraapp/main.dart';
+import 'main.dart';
 
 void main() {
   runApp(MyApp());

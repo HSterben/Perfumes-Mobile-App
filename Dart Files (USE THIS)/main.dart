@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:spectraapp/order.dart';
+import 'order.dart';
 import 'add.dart';
 
 void main() {

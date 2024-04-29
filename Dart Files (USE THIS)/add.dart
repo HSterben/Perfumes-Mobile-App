@@ -110,45 +110,41 @@ class _MyHomePageADDState extends State<MyHomePageADD> {
                 ),
               ],
             ),
-            Divider(
-              thickness: 2,
-              color: Colors.indigo,
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: perfumes.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    height: 60,
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          color: Colors
-                              .grey, // Choose the color you want for the line
-                        ),
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        Text(
-                          '${perfumes[index].brand} ${perfumes[index].name}',
-                          style: TextStyle(color: Colors.black, fontSize: 18),
-                        ),
-                        Text(
-                          '${perfumes[index].quantity} ${perfumes[index].price}\$',
-                          style: TextStyle(color: Colors.black, fontSize: 15),
-                        ),
-                        Spacer(),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-            Text(
-              "HELLO HELLO",
-              style: TextStyle(color: Colors.black, fontSize: 20),
-            ),
+            // Divider(
+            //   thickness: 2,
+            //   color: Colors.indigo,
+            // ),
+            // Expanded(
+            //   child: ListView.builder(
+            //     itemCount: perfumes.length,
+            //     itemBuilder: (BuildContext context, int index) {
+            //       return Container(
+            //         height: 60,
+            //         decoration: BoxDecoration(
+            //           border: Border(
+            //             bottom: BorderSide(
+            //               color: Colors
+            //                   .grey, // Choose the color you want for the line
+            //             ),
+            //           ),
+            //         ),
+                    // child: Row(
+                    //   children: [
+                    //     Text(
+                    //       '${perfumes[index].brand} ${perfumes[index].name}',
+                    //       style: TextStyle(color: Colors.black, fontSize: 18),
+                    //     ),
+                    //     Text(
+                    //       '${perfumes[index].quantity} ${perfumes[index].price}\$',
+                    //       style: TextStyle(color: Colors.black, fontSize: 15),
+                    //     ),
+                    //     Spacer(),
+                    //   ],
+                    // ),
+                //   );
+                // },
+              // ),
+            // ),
           ],
         ),
       ),
