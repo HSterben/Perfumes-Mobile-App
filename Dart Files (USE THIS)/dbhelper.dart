@@ -1,16 +1,17 @@
-// dbhelper.dart
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'perfume.dart';
 
 class DBHelper {
-  static final _databaseName = "perfumeDatabase.db";
+  static final _databaseName = "PerfumeDatabase.db";
   static final _databaseVersion = 1;
-  static final table = 'perfume_table';
+
+  static final table = 'Perfume_table';
 
   static final columnId = 'id';
-  static final columnTitle = 'title';
   static final columnBrand = 'brand';
+  static final columnName = 'name';
+  static final columnPerfumeNumber = 'perfume_number';
   static final columnPrice = 'price';
   static final columnImageUrl = 'imageUrl';
   static final columnQuantity = 'quantity';
@@ -19,10 +20,10 @@ class DBHelper {
   static final DBHelper instance = DBHelper._privateConstructor();
 
   static Database? _database;
-  Future<Database> get database async {
-    if (_database != null) return _database!;
+  Future<Database?> get database async {
+    if (_database != null) return _database;
     _database = await _initDatabase();
-    return _database!;
+    return _database;
   }
 
   _initDatabase() async {
@@ -36,35 +37,55 @@ class DBHelper {
     await db.execute('''
       CREATE TABLE $table (
         $columnId INTEGER PRIMARY KEY AUTOINCREMENT,
-        $columnTitle TEXT NOT NULL,
         $columnBrand TEXT NOT NULL,
-        $columnPrice REAL NOT NULL,
+        $columnName TEXT NOT NULL,
+        $columnPerfumeNumber TEXT NOT NULL,
+        $columnPrice DOUBLE NOT NULL,
         $columnImageUrl TEXT NOT NULL,
         $columnQuantity INTEGER NOT NULL
       )
     ''');
   }
 
-  Future<int> insert(Perfume perfume) async {
-    Database db = await database;
-    return await db.insert(table, perfume.toMap());
+  Future<int?> insert(Perfume perfume) async {
+    Database? db = await instance.database;
+    return await db?.insert(table, {
+      'id': perfume.id,
+      'brand': perfume.brand,
+      'name': perfume.name,
+      'perfume_number' : perfume.perfumeNumber,
+      'price': perfume.price,
+      'imageUrl': perfume.imageUrl,
+      'quantity': perfume.quantity,
+    });
   }
 
-  Future<List<Perfume>> queryAll() async {
-    Database db = await database;
-    var res = await db.query(table);
-    List<Perfume> list = res.isNotEmpty ? res.map((c) => Perfume.fromMap(c)).toList() : [];
-    return list;
+  Future<List<Map<String, dynamic>>?> queryAllRows() async {
+    Database? db = await instance.database;
+    return await db?.query(table);
   }
 
-  Future<int> update(Perfume perfume) async {
-    Database db = await database;
-    return await db.update(table, perfume.toMap(),
-        where: '$columnId = ?', whereArgs: [perfume.id]);
+  Future<List<Map<String, dynamic>>?> queryRows(name) async {
+    Database? db = await instance.database;
+    return await db?.query(table, where: "$columnBrand LIKE '%$name%'");
   }
 
-  Future<int> delete(int id) async {
-    Database db = await database;
-    return await db.delete(table, where: '$columnId = ?', whereArgs: [id]);
+  Future<int?> queryRowCount() async {
+    Database? db = await instance.database;
+    final List<Map<String, Object?>>? result = await db?.rawQuery('SELECT COUNT(*) FROM $table');
+    final List<Map<String, Object?>> nonNullableResult = result ?? []; // Handle null case
+    return Sqflite.firstIntValue(nonNullableResult) ?? 0;
+  }
+
+  Future<int?> update(Perfume perfume) async {
+    Database? db = await instance.database;
+    int id = perfume.toMap()['id'];
+    return await db?.update(table, perfume.toMap(),
+        where: '$columnId = ?', whereArgs: [id]);
+  }
+
+  Future<int?> delete(int id) async {
+    Database? db = await instance.database;
+    return await db?.delete(table, where: '$columnId = ?', whereArgs: [id]);
   }
 }

@@ -1,6 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'order.dart';
+import 'add.dart';
 
 void main() {
   runApp(MyApp());
@@ -26,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController passwordController = TextEditingController();
   void _login() {
     if (emailController.text == 'admin' && passwordController.text == 'admin') {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => OrderPage()));
+      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => OrderPage()));
     } else {
       showDialog(
         context: context,
@@ -68,6 +67,9 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         ),
+        ElevatedButton(onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => MyAppADD()));
+        }, child: Text("Testing this")),
         Container(
           margin: EdgeInsets.only(top: 50, right: 10, left: 10),
           decoration: BoxDecoration(
