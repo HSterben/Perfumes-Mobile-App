@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spectraapp/order.dart';
 import 'add.dart';
 
 void main() {
@@ -25,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController passwordController = TextEditingController();
   void _login() {
     if (emailController.text == 'admin' && passwordController.text == 'admin') {
-      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => OrderPage()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyHomePage()));
     } else {
       showDialog(
         context: context,

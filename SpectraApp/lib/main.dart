@@ -1,5 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:spectraapp/order.dart';
+import 'add.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,7 +24,27 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
+  void _login() {
+    if (emailController.text == 'admin' && passwordController.text == 'admin') {
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyHomePage()));
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Error'),
+          content: Text('Invalid username or password'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
   // Boolean value to toggle between login and create account
   bool showLogin = true;
 
@@ -47,6 +68,9 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         ),
+        ElevatedButton(onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => MyAppADD()));
+        }, child: Text("Testing this")),
         Container(
           margin: EdgeInsets.only(top: 50, right: 10, left: 10),
           decoration: BoxDecoration(
@@ -251,7 +275,9 @@ class _LoginPageState extends State<LoginPage> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.deepPurpleAccent,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    _login();
+                  },
                   child: Text(
                     "Sign In",
                     style: TextStyle(color: Colors.white),
