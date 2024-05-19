@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'perfume.dart';
+import 'perfumeModel.dart';
 import 'dbhelper.dart';
 
 class MyAppADD extends StatelessWidget {

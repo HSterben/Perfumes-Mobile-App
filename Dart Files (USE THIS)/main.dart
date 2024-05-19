@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spectraapp/dbhelper.dart';
 import 'order.dart';
 import 'add.dart';
 
@@ -206,7 +207,15 @@ class _LoginPageState extends State<LoginPage> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.deepPurpleAccent,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    String email = emailController.text;
+                    String pass = passwordController.text;
+                    _update(updateID, fName, lName);
+                    _queryAll();
+                    fNameController.clear();
+                    lNameController.clear();
+                    updateID = -1;
+                  },
                   child: Text(
                     "Get Started",
                     style: TextStyle(color: Colors.white),
@@ -287,5 +296,31 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+  void _insert(email, pass) async {
+    // row to insert
+    Map<String, dynamic> row = {
+      DBHelper.columnFName: firstName,
+      DBHelper.columnLName: lastName
+    };
+    Person person = Person.fromMap(row);
+    final id = await dbHelper.insert(person);
+    // _showMessageInScaffold('inserted row id: $id');
+  }
+
+  void _queryAll() async {
+    final allRows = await dbHelper.queryAllRows();
+    persons.clear();
+    allRows?.forEach((row) => persons.add(Person.fromMap(row)));
+    setState(() {});
+  }
+
+  void _update(id, fName, lName) async {
+    Person person = Person(id: id, firstName: fName, lastName: lName);
+    final rowsAffected = await dbHelper.update(person);
+  }
+
+  void _delete(id) async {
+    final rowsDeleted = await dbHelper.delete(id);
   }
 }
