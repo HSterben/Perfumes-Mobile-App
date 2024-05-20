@@ -22,7 +22,7 @@ class DBHelper {
   //User columns
   static final userId = 'id';
   static final username = 'username';
-  static final password = 'password';
+  static final userPassword = 'password';
   static final userEmail = 'email';
 
   DBHelper._privateConstructor();
@@ -60,7 +60,7 @@ class DBHelper {
       CREATE TABLE $userTable (
         $userId INTEGER PRIMARY KEY AUTOINCREMENT,
         $username TEXT NOT NULL UNIQUE,
-        $password TEXT NOT NULL,
+        $userPassword TEXT NOT NULL,
         $userEmail TEXT NOT NULL UNIQUE
       )
     ''');
