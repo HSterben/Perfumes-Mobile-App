@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'dbhelper.dart';
-import 'perfumeModel.dart';
-import 'add.dart';
-import 'view_perfume.dart';
+import 'firestore_helper.dart';
+import 'perfume.dart';
+import 'read.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -10,7 +9,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final dbHelper = DBHelper.instance;
+  final dbHelper = FirestoreHelper.instance;
   List<Perfume> perfumes = [];
 
   @override
@@ -20,10 +19,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _queryAll() async {
-    final allRows = await dbHelper.queryAllRows();
-    perfumes.clear();
-    allRows?.forEach((row) => perfumes.add(Perfume.fromMap(row)));
-    setState(() {});
+    List<Perfume> allPerfumes = await dbHelper.queryAllPerfumes();
+    setState(() {
+      perfumes = allPerfumes;
+    });
   }
 
   @override
@@ -37,9 +36,8 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MyHomePageADD()),
+                MaterialPageRoute(builder: (context) => MyHomePage()),
               ).then((_) {
-                // This will be triggered when Navigator.pop() is called from MyHomePageADD
                 _queryAll(); // Refresh the list after adding a new perfume
               });
             },
@@ -58,12 +56,6 @@ class _MyHomePageState extends State<MyHomePage> {
         separatorBuilder: (context, index) => Divider(color: Colors.grey),
         itemBuilder: (context, index) {
           return ListTile(
-            // leading: Image.network(
-            //   perfumes[index].imageUrl,
-            //   width: 20,
-            //   height: 20,
-            //   fit: BoxFit.cover,
-            // ),
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -86,10 +78,13 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
             onTap: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => ViewProductPage(perfume: perfumes[index])),
-              // );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      DetailedScreen(perfume: perfumes[index]),
+                ),
+              );
             },
           );
         },

@@ -1,7 +1,5 @@
-import 'dbhelper.dart';
-
 class Perfume {
-  int? id;
+  String? id;
   String? brand;
   String? name;
   String? perfumeNumber;
@@ -10,7 +8,7 @@ class Perfume {
   int? quantity;
 
   Perfume({
-    required this.id,
+    this.id,
     required this.brand,
     required this.name,
     required this.perfumeNumber,
@@ -30,13 +28,13 @@ class Perfume {
 
   Map<String, dynamic> toMap() {
     return {
-      DBHelper.columnId: id,
-      DBHelper.columnBrand: brand,
-      DBHelper.columnName: name,
-      DBHelper.columnPerfumeNumber: perfumeNumber,
-      DBHelper.columnPrice: price,
-      DBHelper.columnImageUrl: imageUrl,
-      DBHelper.columnQuantity: quantity,
+      'id': id,
+      'brand': brand,
+      'name': name,
+      'perfume_number': perfumeNumber,
+      'price': price,
+      'imageUrl': imageUrl,
+      'quantity': quantity,
     };
   }
 }

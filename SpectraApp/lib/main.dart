@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:spectraapp/dbhelper.dart';
-import 'order.dart';
-import 'add.dart';
-import 'userModel.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'login_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -13,338 +13,75 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Spectra Perfume',
-      home: LoginPage(),
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: LoadingScreen(),
     );
   }
 }
 
-class LoginPage extends StatefulWidget {
+class LoadingScreen extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _LoadingScreenState createState() => _LoadingScreenState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  List<User> users = [];
-  final dbHelper = DBHelper.instance;
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-
-  // Boolean value to toggle between login and create account
-  bool showLogin = true;
+class _LoadingScreenState extends State<LoadingScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(seconds: 3), () {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => LoginPage()));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: mainPage(),
-    );
-  }
-
-  Widget mainPage() {
-    return SingleChildScrollView(
-      child: Column(children: [
-        Container(
-          margin: EdgeInsets.only(top: 50),
-          child: Text(
-            "Spectra Perfumes",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 30,
-            ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFF46426c),
+              Color(0xFF1b1b2f),
+            ],
           ),
         ),
-        ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => MyAppADD()));
-            },
-            child: Text("Testing this")),
-        Container(
-          margin: EdgeInsets.only(top: 50, right: 10, left: 10),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  blurRadius: 10,
-                  spreadRadius: 5)
-            ],
-            color: Colors.white,
-          ),
+        child: Center(
           child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.only(
-                        left: 30, right: 30, top: 20, bottom: 10),
-                    decoration: BoxDecoration(
-                      border: showLogin
-                          ? Border()
-                          : Border(
-                              bottom: BorderSide(
-                                  color: Colors.deepPurpleAccent, width: 3),
-                            ),
-                    ),
-                    child: GestureDetector(
-                      child: Text(
-                        'Create Account',
-                        style: TextStyle(
-                          color: Colors.black,
-                        ),
-                      ),
-                      onTap: () {
-                        setState(() {
-                          showLogin = false;
-                        });
-                      },
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(
-                        left: 30, right: 30, top: 20, bottom: 10),
-                    decoration: BoxDecoration(
-                      border: showLogin
-                          ? Border(
-                              bottom: BorderSide(
-                                  color: Colors.deepPurpleAccent, width: 3),
-                            )
-                          : Border(),
-                    ),
-                    child: GestureDetector(
-                      child: Text(
-                        'Log In',
-                        style: TextStyle(
-                          color: Colors.black,
-                        ),
-                      ),
-                      onTap: () {
-                        setState(() {
-                          showLogin = true;
-                        });
-                      },
-                    ),
-                  ),
-                ],
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                'SPECTRA',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              showLogin ? _buildLogin() : _buildCreateAccount(),
+              Text(
+                'PERFUMES',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 10),
+              Text(
+                'MADE IN DUBAI',
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 16,
+                ),
+              ),
             ],
           ),
         ),
-      ]),
-    );
-  }
-
-  Widget _buildCreateAccount() {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Create Account',
-              style: TextStyle(fontSize: 24.0),
-            ),
-            SizedBox(height: 10),
-            Text(
-              "Let\'s get started by filling out the form below.",
-              style: TextStyle(fontSize: 15.0),
-            ),
-            SizedBox(height: 20),
-            Container(
-              margin: EdgeInsets.only(bottom: 20),
-              width: 300,
-              child: TextFormField(
-                controller: emailController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  hintText: 'Enter your email',
-                  border: OutlineInputBorder(
-                    borderRadius:
-                        BorderRadius.circular(40.0), // Set border radius here
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              width: 300,
-              height: 60,
-              child: TextFormField(
-                controller: passwordController,
-                keyboardType: TextInputType.visiblePassword,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  hintText: 'Enter your password',
-                  border: OutlineInputBorder(
-                    borderRadius:
-                        BorderRadius.circular(40.0), // Set border radius here
-                  ),
-                ),
-              ),
-            ),
-            Container(
-                margin: EdgeInsets.only(top: 25, bottom: 253),
-                width: 200,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepPurpleAccent,
-                  ),
-                  onPressed: () {
-                    String email = emailController.text;
-                    String pass = passwordController.text;
-                    _insert(email, pass);
-                    emailController.clear();
-                    passwordController.clear();
-                  },
-                  child: Text(
-                    "Get Started",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ))
-          ],
-        ),
       ),
     );
-  }
-
-  Widget _buildLogin() {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Welcome Back',
-              style: TextStyle(fontSize: 24.0),
-            ),
-            SizedBox(height: 10),
-            Text(
-              "Fill out the information below in order to access your account.",
-              style: TextStyle(fontSize: 15.0),
-            ),
-            SizedBox(height: 20),
-            Container(
-              margin: EdgeInsets.only(bottom: 20),
-              width: 300,
-              child: TextFormField(
-                controller: emailController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  hintText: 'Enter your email',
-                  border: OutlineInputBorder(
-                    borderRadius:
-                        BorderRadius.circular(40.0), // Set border radius here
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              width: 300,
-              height: 60,
-              child: TextFormField(
-                controller: passwordController,
-                keyboardType: TextInputType.visiblePassword,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  hintText: 'Enter your password',
-                  border: OutlineInputBorder(
-                    borderRadius:
-                        BorderRadius.circular(40.0), // Set border radius here
-                  ),
-                ),
-              ),
-            ),
-            Container(
-                margin: EdgeInsets.only(top: 25, bottom: 232),
-                width: 200,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepPurpleAccent,
-                  ),
-                  onPressed: () {
-                    _login();
-                  },
-                  child: Text(
-                    "Sign aIn",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ))
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _login() {
-    for (User user in users) {
-      if (user.email == emailController.text) {
-        if (user.password == passwordController.text) {
-          final snackBar = SnackBar(content: Text('Logging in'));
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => MyHomePage()));
-        } else {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: Text('Error'),
-              content: Text('Invalid password'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('OK'),
-                ),
-              ],
-            ),
-          );
-        }
-      }
-    }
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Error'),
-        content: Text('Invalid username or password'),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text('OK'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _insert(email, pass) async {
-
-    String username = email.substring(email.indexOf('@'));
-    // row to insert
-    Map<String, dynamic> row = {
-      DBHelper.username: username,
-      DBHelper.userEmail: email,
-      DBHelper.userPassword: pass
-    };
-    User user = User.fromMap(row);
-    final id = await dbHelper.insertUser(user);
-    final snackBar = SnackBar(content: Text('Account created'));
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
-  void _queryAll() async {
-    final allRows = await dbHelper.queryAllRows();
-    users.clear();
-    allRows?.forEach((row) => users.add(User.fromMap(row)));
-    setState(() {});
   }
 }
