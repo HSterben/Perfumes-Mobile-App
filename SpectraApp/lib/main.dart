@@ -1,7 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:spectraapp/order.dart';
+import 'package:spectraapp/dbhelper.dart';
+import 'order.dart';
 import 'add.dart';
+import 'userModel.dart';
 
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Spectra Perfume',
+      home: LoginPage(),
+    );
+  }
+}
 
 class LoginPage extends StatefulWidget {
   @override
@@ -9,29 +24,11 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  List<User> users = [];
+  final dbHelper = DBHelper.instance;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  void _login() {
-    if (emailController.text == 'admin' && passwordController.text == 'admin') {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyHomePage()));
-    } else {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text('Error'),
-          content: Text('Invalid username or password'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('OK'),
-            ),
-          ],
-        ),
-      );
-    }
-  }
+
   // Boolean value to toggle between login and create account
   bool showLogin = true;
 
@@ -55,6 +52,12 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         ),
+        ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => MyAppADD()));
+            },
+            child: Text("Testing this")),
         Container(
           margin: EdgeInsets.only(top: 50, right: 10, left: 10),
           decoration: BoxDecoration(
@@ -190,7 +193,13 @@ class _LoginPageState extends State<LoginPage> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.deepPurpleAccent,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    String email = emailController.text;
+                    String pass = passwordController.text;
+                    _insert(email, pass);
+                    emailController.clear();
+                    passwordController.clear();
+                  },
                   child: Text(
                     "Get Started",
                     style: TextStyle(color: Colors.white),
@@ -263,7 +272,7 @@ class _LoginPageState extends State<LoginPage> {
                     _login();
                   },
                   child: Text(
-                    "Sign In",
+                    "Sign aIn",
                     style: TextStyle(color: Colors.white),
                   ),
                 ))
@@ -271,5 +280,71 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  void _login() {
+    for (User user in users) {
+      if (user.email == emailController.text) {
+        if (user.password == passwordController.text) {
+          final snackBar = SnackBar(content: Text('Logging in'));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => MyHomePage()));
+        } else {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('Error'),
+              content: Text('Invalid password'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            ),
+          );
+        }
+      }
+    }
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Error'),
+        content: Text('Invalid username or password'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _insert(email, pass) async {
+
+    String username = email.substring(email.indexOf('@'));
+    // row to insert
+    Map<String, dynamic> row = {
+      DBHelper.username: username,
+      DBHelper.userEmail: email,
+      DBHelper.userPassword: pass
+    };
+    User user = User.fromMap(row);
+    final id = await dbHelper.insertUser(user);
+    final snackBar = SnackBar(content: Text('Account created'));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void _queryAll() async {
+    final allRows = await dbHelper.queryAllRows();
+    users.clear();
+    allRows?.forEach((row) => users.add(User.fromMap(row)));
+    setState(() {});
   }
 }
