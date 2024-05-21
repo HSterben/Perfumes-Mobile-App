@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'models.dart';
 import 'dbhelper.dart';
-import 'perfume_detail.dart';
-import 'add_perfume_screen.dart'; // import add perfume screen
-import 'edit_perfume_screen.dart'; // import edit perfume screen
 
 class MyHomePage extends StatefulWidget {
   final bool isAdmin;
@@ -15,6 +12,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final dbHelper = DatabaseHelper.instance;
+
+  bool adminView = true;
   List<Perfume> perfumes = [];
 
   @override
