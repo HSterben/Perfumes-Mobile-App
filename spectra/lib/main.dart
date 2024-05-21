@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'models.dart';
 import 'dbhelper.dart';
 import 'login.dart';
+import 'home.dart';
+import 'add_perfume_screen.dart';
+import 'edit_perfume_screen.dart';
 
 void main() async {
   runApp(MyApp());
