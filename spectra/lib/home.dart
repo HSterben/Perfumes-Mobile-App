@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'models.dart';
 import 'dbhelper.dart';
+import 'perfume_detail.dart';
+import 'add_perfume_screen.dart'; // import add perfume screen
+import 'edit_perfume_screen.dart'; // import edit perfume screen
 
 class MyHomePage extends StatefulWidget {
   final bool isAdmin;
@@ -12,8 +15,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final dbHelper = DatabaseHelper.instance;
-
-  bool adminView = true;
   List<Perfume> perfumes = [];
 
   @override
@@ -43,26 +44,23 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Order Now'),
-        actions: [
+        actions: widget.isAdmin
+            ? [
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: () {
-              Navigator.push(
+            onPressed: () async {
+              final result = await Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => AddPerfumeScreen()),
-              ).then((_) {
+              );
+
+              if (result == true) {
                 _queryAll(); // Refresh the list after adding a new perfume
-              });
+              }
             },
           ),
-          SizedBox(width: 10),
-          IconButton(
-            icon: Icon(Icons.shopping_cart_outlined),
-            onPressed: () {
-              // Handle cart action
-            },
-          ),
-        ],
+        ]
+            : [],
       ),
       body: ListView.separated(
         itemCount: perfumes.length,
@@ -104,19 +102,46 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ],
               ),
-              trailing: Text(
-                '\$${double.parse(perfumes[index].price ?? '0').toStringAsFixed(2)}',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (widget.isAdmin)
+                    IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: () async {
+                        final result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditPerfumeScreen(perfume: perfumes[index]),
+                          ),
+                        );
+
+                        if (result == true) {
+                          _queryAll(); // Refresh the list after updating a perfume
+                        }
+                      },
+                    ),
+                  if (widget.isAdmin)
+                    IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () {
+                        _deletePerfume(perfumes[index].id);
+                      },
+                    ),
+                  Text(
+                    '\$${double.parse(perfumes[index].price ?? '0').toStringAsFixed(2)}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
               ),
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        PerfumeDetailScreen(perfume: perfumes[index]),
+                    builder: (context) => PerfumeDetailScreen(perfume: perfumes[index]),
                   ),
                 );
               },
