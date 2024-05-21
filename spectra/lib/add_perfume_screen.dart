@@ -22,7 +22,7 @@ class _AddPerfumeScreenState extends State<AddPerfumeScreen> {
       appBar: AppBar(
         title: Text('Add Perfume'),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Column(
           children: [

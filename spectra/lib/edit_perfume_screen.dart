@@ -36,7 +36,7 @@ class _EditPerfumeScreenState extends State<EditPerfumeScreen> {
       appBar: AppBar(
         title: Text('Edit Perfume'),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Column(
           children: [
