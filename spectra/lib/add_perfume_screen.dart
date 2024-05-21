@@ -66,7 +66,8 @@ class _AddPerfumeScreenState extends State<AddPerfumeScreen> {
     final name = nameController.text;
     final number = numberController.text;
     final price = priceController.text;
-    final imageUrl = imageUrlController.text;
+    String Url = imageUrlController.text;
+    final imageUrl = (Url == "") ? "https://img.freepik.com/premium-vector/vector-hand-drawn-perfume-outline-doodle-icon-perfume-sketch-illustration-print-web-mobile-infographics-isolated-white-background_107173-17476.jpg" : Url;
     final quantity = quantityController.text;
 
     Perfume perfume = Perfume(
