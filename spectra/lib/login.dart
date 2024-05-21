@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'home.dart';
 import 'models.dart';
 import 'dbhelper.dart';
 
@@ -60,9 +61,9 @@ class _LoginPageState extends State<LoginPage> {
                       border: showLogin
                           ? Border()
                           : Border(
-                        bottom: BorderSide(
-                            color: Colors.deepPurpleAccent, width: 3),
-                      ),
+                              bottom: BorderSide(
+                                  color: Colors.deepPurpleAccent, width: 3),
+                            ),
                     ),
                     child: GestureDetector(
                       child: Text(
@@ -84,9 +85,9 @@ class _LoginPageState extends State<LoginPage> {
                     decoration: BoxDecoration(
                       border: showLogin
                           ? Border(
-                        bottom: BorderSide(
-                            color: Colors.deepPurpleAccent, width: 3),
-                      )
+                              bottom: BorderSide(
+                                  color: Colors.deepPurpleAccent, width: 3),
+                            )
                           : Border(),
                     ),
                     child: GestureDetector(
@@ -141,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                   hintText: 'Enter your email',
                   border: OutlineInputBorder(
                     borderRadius:
-                    BorderRadius.circular(40.0), // Set border radius here
+                        BorderRadius.circular(40.0), // Set border radius here
                   ),
                 ),
               ),
@@ -158,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                   hintText: 'Enter your password',
                   border: OutlineInputBorder(
                     borderRadius:
-                    BorderRadius.circular(40.0), // Set border radius here
+                        BorderRadius.circular(40.0), // Set border radius here
                   ),
                 ),
               ),
@@ -176,6 +177,8 @@ class _LoginPageState extends State<LoginPage> {
                     _insertUser(email, pass);
                     emailController.clear();
                     passwordController.clear();
+                    showLogin = true;
+                    _queryAllUsers();
                   },
                   child: Text(
                     "Get Started",
@@ -216,7 +219,7 @@ class _LoginPageState extends State<LoginPage> {
                   hintText: 'Enter your email',
                   border: OutlineInputBorder(
                     borderRadius:
-                    BorderRadius.circular(40.0), // Set border radius here
+                        BorderRadius.circular(40.0), // Set border radius here
                   ),
                 ),
               ),
@@ -233,7 +236,7 @@ class _LoginPageState extends State<LoginPage> {
                   hintText: 'Enter your password',
                   border: OutlineInputBorder(
                     borderRadius:
-                    BorderRadius.circular(40.0), // Set border radius here
+                        BorderRadius.circular(40.0), // Set border radius here
                   ),
                 ),
               ),
@@ -268,11 +271,16 @@ class _LoginPageState extends State<LoginPage> {
     for (User u in users) {
       if (u.email == email) {
         if (u.password == password) {
-          final snackBar = SnackBar(content: Text('Logging in'));
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        return;
-          // Navigator.pushReplacement(
-          //   context, MaterialPageRoute(builder: (context) => MyHomePage()));
+          // final snackBar = SnackBar(content: Text('Logging in'));
+          // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  MyHomePage(),
+            ),
+          );
+          return;
         }
       }
     }
@@ -288,7 +296,7 @@ class _LoginPageState extends State<LoginPage> {
     };
     User user = User.fromMap(row);
     final id = await dbHelper.insertUser(user);
-    // _showMessageInScaffold('inserted row id: $id');
+    print("inserted user!");
   }
 
   void _queryAllUsers() async {
@@ -557,4 +565,3 @@ class _LoginPageState extends State<LoginPage> {
 //     final rowsDeleted = await dbHelper.deleteUser(id);
 //   }
 // }
-
