@@ -17,6 +17,9 @@ class PerfumeDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            perfume.imageUrl != null
+                ? Image.network(perfume.imageUrl!)
+                : Container(),
             Text(
               '${perfume.brand} ${perfume.name}',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -25,10 +28,7 @@ class PerfumeDetailScreen extends StatelessWidget {
             Text('Number: ${perfume.number}'),
             Text('Price: \$${perfume.price}'),
             Text('Quantity: ${perfume.quantity}'),
-            SizedBox(height: 10),
-            perfume.imageUrl != null
-                ? Image.network(perfume.imageUrl!)
-                : Container(),
+
           ],
         ),
       ),

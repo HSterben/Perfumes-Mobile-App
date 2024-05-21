@@ -44,79 +44,84 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Order Now'),
-        actions: widget.isAdmin
-            ? [
+        actions: [
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: () async {
-              final result = await Navigator.push(
+            onPressed: () {
+              Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => AddPerfumeScreen()),
-              );
-
-              if (result == true) {
+              ).then((_) {
                 _queryAll(); // Refresh the list after adding a new perfume
-              }
+              });
             },
           ),
-        ]
-            : [],
+          SizedBox(width: 10),
+          IconButton(
+            icon: Icon(Icons.shopping_cart_outlined),
+            onPressed: () {
+              // Handle cart action
+            },
+          ),
+        ],
       ),
       body: ListView.separated(
         itemCount: perfumes.length,
         separatorBuilder: (context, index) => Divider(color: Colors.grey),
         itemBuilder: (context, index) {
-          return ListTile(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${perfumes[index].brand} ${perfumes[index].name}',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Text('${perfumes[index].number}'),
-                    ],
+          return Card(
+            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            child: ListTile(
+              contentPadding: EdgeInsets.all(10),
+              leading: Image.network(
+                perfumes[index].imageUrl ?? 'https://picsum.photos/250?image=9', // Add your image path here
+                width: 60,
+                height: 60,
+                fit: BoxFit.cover,
+              ),
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    perfumes[index].brand ?? 'Unknown',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
+                  Text(
+                    perfumes[index].name ?? 'Name',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[700],
+                    ),
+                  ),
+                  Text(
+                    '${perfumes[index].number}', // Adjust according to your data
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+              trailing: Text(
+                '\$${double.parse(perfumes[index].price ?? '0').toStringAsFixed(2)}',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
                 ),
-                Text(
-                  '\$${perfumes[index].price}',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ],
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        PerfumeDetailScreen(perfume: perfumes[index]),
+                  ),
+                );
+              },
             ),
-            onTap: () => _navigateToDetail(perfumes[index]),
-            trailing: widget.isAdmin
-                ? Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: () async {
-                    final result = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditPerfumeScreen(perfume: perfumes[index]),
-                      ),
-                    );
-
-                    if (result == true) {
-                      _queryAll(); // Refresh the list after updating a perfume
-                    }
-                  },
-                ),
-                IconButton(
-                  icon: Icon(Icons.delete),
-                  onPressed: () {
-                    _deletePerfume(perfumes[index].id);
-                  },
-                ),
-              ],
-            )
-                : null,
           );
         },
       ),
