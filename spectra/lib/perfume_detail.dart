@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'models.dart';
 import 'dbhelper.dart';
-<<<<<<< Updated upstream
-import 'ApiService.dart';
-=======
 import 'cart.dart';
->>>>>>> Stashed changes
+import 'ApiService.dart';
 
 class PerfumeDetailScreen extends StatefulWidget {
   final Perfume perfume;
 
   PerfumeDetailScreen({required this.perfume});
 
-<<<<<<< Updated upstream
   @override
   _PerfumeDetailScreenState createState() => _PerfumeDetailScreenState();
 }
@@ -29,13 +23,9 @@ class _PerfumeDetailScreenState extends State<PerfumeDetailScreen> {
     comments = ApiService().getComments();
   }
 
-  void _addToCart(Perfume perfume) async {
-    await dbHelper.insertCartItem(perfume);
-=======
   void _addToCart(int perfumeId) async {
     Cart().addItem(perfumeId);
->>>>>>> Stashed changes
-    print('${perfume.name} added to cart');
+    print('${widget.perfume.name} added to cart');
   }
 
   @override
@@ -50,7 +40,11 @@ class _PerfumeDetailScreenState extends State<PerfumeDetailScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             widget.perfume.imageUrl != null
-                ? Image.network(width: 350, height: 350, widget.perfume.imageUrl!)
+                ? Image.network(
+              widget.perfume.imageUrl!,
+              width: 350,
+              height: 350,
+            )
                 : Container(),
             SizedBox(height: 10),
             Text(
@@ -63,11 +57,7 @@ class _PerfumeDetailScreenState extends State<PerfumeDetailScreen> {
             Text('Quantity: ${widget.perfume.quantity}'),
             SizedBox(height: 20),
             ElevatedButton(
-<<<<<<< Updated upstream
-              onPressed: () => _addToCart(widget.perfume),
-=======
-              onPressed: () => _addToCart(perfume.id!),
->>>>>>> Stashed changes
+              onPressed: () => _addToCart(widget.perfume.id!),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.deepPurple,
                 padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),

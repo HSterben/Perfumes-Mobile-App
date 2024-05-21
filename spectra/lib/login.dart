@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'home.dart';
 import 'models.dart';
 import 'dbhelper.dart';
+import 'cart.dart'; // Ensure you import the Cart class
 
 class LoginPage extends StatefulWidget {
   @override
@@ -61,9 +62,9 @@ class _LoginPageState extends State<LoginPage> {
                       border: showLogin
                           ? Border()
                           : Border(
-                              bottom: BorderSide(
-                                  color: Colors.deepPurpleAccent, width: 3),
-                            ),
+                        bottom: BorderSide(
+                            color: Colors.deepPurpleAccent, width: 3),
+                      ),
                     ),
                     child: GestureDetector(
                       child: Text(
@@ -85,9 +86,9 @@ class _LoginPageState extends State<LoginPage> {
                     decoration: BoxDecoration(
                       border: showLogin
                           ? Border(
-                              bottom: BorderSide(
-                                  color: Colors.deepPurpleAccent, width: 3),
-                            )
+                        bottom: BorderSide(
+                            color: Colors.deepPurpleAccent, width: 3),
+                      )
                           : Border(),
                     ),
                     child: GestureDetector(
@@ -142,7 +143,7 @@ class _LoginPageState extends State<LoginPage> {
                   hintText: 'Enter your email',
                   border: OutlineInputBorder(
                     borderRadius:
-                        BorderRadius.circular(40.0), // Set border radius here
+                    BorderRadius.circular(40.0), // Set border radius here
                   ),
                 ),
               ),
@@ -159,7 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                   hintText: 'Enter your password',
                   border: OutlineInputBorder(
                     borderRadius:
-                        BorderRadius.circular(40.0), // Set border radius here
+                    BorderRadius.circular(40.0), // Set border radius here
                   ),
                 ),
               ),
@@ -219,7 +220,7 @@ class _LoginPageState extends State<LoginPage> {
                   hintText: 'Enter your email',
                   border: OutlineInputBorder(
                     borderRadius:
-                        BorderRadius.circular(40.0), // Set border radius here
+                    BorderRadius.circular(40.0), // Set border radius here
                   ),
                 ),
               ),
@@ -236,7 +237,7 @@ class _LoginPageState extends State<LoginPage> {
                   hintText: 'Enter your password',
                   border: OutlineInputBorder(
                     borderRadius:
-                        BorderRadius.circular(40.0), // Set border radius here
+                    BorderRadius.circular(40.0), // Set border radius here
                   ),
                 ),
               ),
@@ -266,12 +267,12 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // in the _loginUser method
   void _loginUser(email, password) {
     _queryAllUsers();
     for (User u in users) {
       if (u.email == email) {
         if (u.password == password) {
+          Cart().clear(); // Clear the cart on successful login
           bool isAdmin = email == 'admin' && password == 'admin';
           Navigator.push(
             context,

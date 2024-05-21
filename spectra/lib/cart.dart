@@ -16,5 +16,9 @@ class Cart {
     _cartItemIds.remove(perfumeId);
   }
 
+  void clear() {
+    _cartItemIds.clear();
+  }
+
   List<int> get items => _cartItemIds;
 }

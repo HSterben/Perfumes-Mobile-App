@@ -43,6 +43,14 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
+  void _showSnackbar(BuildContext context, double total) {
+    final snackBar = SnackBar(
+      content: Text('Thanks for your \$${total.toStringAsFixed(2)} purchase!'),
+      duration: Duration(seconds: 3),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,13 +134,15 @@ class _CartPageState extends State<CartPage> {
             ),
             SizedBox(height: 10),
             Text(
-              'Total: \$${_calculateTotalPrice()}',
+              'Total: \$${_calculateTotalPrice().toStringAsFixed(2)}',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
-                // Handle checkout
+                final total = _calculateTotalPrice();
+                _showSnackbar(context, total);
+                // Handle additional checkout logic here
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.deepPurple,
