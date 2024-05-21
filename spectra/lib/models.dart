@@ -1,5 +1,5 @@
 class Perfume {
-  String? id;
+  int? id;
   String? brand;
   String? name;
   String? number;
@@ -41,6 +41,7 @@ class Perfume {
     );
   }
 }
+
 
 class User {
   int? id;

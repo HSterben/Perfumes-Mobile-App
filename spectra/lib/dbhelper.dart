@@ -67,10 +67,6 @@ class DatabaseHelper {
  ''');
   }
 
-
-
-
-
   //Users CRUD
 
   // Helper methods
@@ -80,8 +76,8 @@ class DatabaseHelper {
   // inserted row.
   Future<int?> insertUser(User user) async {
     Database? db = await instance.database;
-    return await db?.insert(userTable,
-        {'email': user.email, 'password': user.password});
+    return await db
+        ?.insert(userTable, {'email': user.email, 'password': user.password});
   }
 
   // All of the rows are returned as a list of maps, where each map is
@@ -94,7 +90,8 @@ class DatabaseHelper {
   // Queries rows based on the argument received
   Future<List<Map<String, dynamic>>?> queryUser(email) async {
     Database? db = await instance.database;
-    return await db?.query(userTable, where: "$userEmail = ?", whereArgs: [email]);
+    return await db
+        ?.query(userTable, where: "$userEmail = ?", whereArgs: [email]);
   }
 
   // All of the methods (insert, query, update, delete) can also be done using
@@ -134,7 +131,6 @@ class DatabaseHelper {
   Future<int?> insertPerfume(Perfume perfume) async {
     Database? db = await instance.database;
     return await db?.insert(perfumeTable, {
-      'id': perfume.id,
       'brand': perfume.brand,
       'name': perfume.name,
       'number': perfume.number,
@@ -143,6 +139,8 @@ class DatabaseHelper {
       'quantity': perfume.quantity
     });
   }
+
+
   // All of the rows are returned as a list of maps, where each map is
   // a key-value list of columns.
   Future<List<Map<String, dynamic>>?> queryAllPerfumes() async {
@@ -153,7 +151,9 @@ class DatabaseHelper {
   // Queries rows based on the argument received
   Future<List<Map<String, dynamic>>?> queryPerfume(query) async {
     Database? db = await instance.database;
-    return await db?.query(perfumeTable, where: "$perfumeName LIKE '%$query%' OR $perfumeBrand LIKE '%$query%' OR $perfumeNumber LIKE '%$query%'");
+    return await db?.query(perfumeTable,
+        where:
+            "$perfumeName LIKE '%$query%' OR $perfumeBrand LIKE '%$query%' OR $perfumeNumber LIKE '%$query%'");
   }
 
   // All of the methods (insert, query, update, delete) can also be done using
@@ -161,7 +161,7 @@ class DatabaseHelper {
   Future<int?> queryPerfumeCount() async {
     Database? db = await instance.database;
     final List<Map<String, Object?>>? result =
-    await db?.rawQuery('SELECT COUNT(*) FROM $perfumeTable');
+        await db?.rawQuery('SELECT COUNT(*) FROM $perfumeTable');
     final List<Map<String, Object?>> nonNullableResult =
         result ?? []; // Handle null case
     return Sqflite.firstIntValue(nonNullableResult) ?? 0;
@@ -171,15 +171,20 @@ class DatabaseHelper {
   // column values will be used to update the row.
   Future<int?> updatePerfume(Perfume perfume) async {
     Database? db = await instance.database;
-    int id = perfume.toMap()['id'];
-    return await db?.update(perfumeTable, perfume.toMap(),
-        where: '$perfumeID = ?', whereArgs: [id]);
+    return await db?.update(
+      perfumeTable,
+      perfume.toMap(),
+      where: '$perfumeID = ?',
+      whereArgs: [perfume.id],
+    );
   }
+
 
   // Deletes the row specified by the id. The number of affected rows is
   // returned. This should be 1 as long as the row exists.
   Future<int?> deletePerfume(int id) async {
     Database? db = await instance.database;
-    return await db?.delete(perfumeTable, where: '$perfumeID = ?', whereArgs: [id]);
+    return await db
+        ?.delete(perfumeTable, where: '$perfumeID = ?', whereArgs: [id]);
   }
 }

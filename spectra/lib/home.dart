@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:spectra/cart.dart';
 import 'models.dart';
 import 'dbhelper.dart';
 
-
 class MyHomePage extends StatefulWidget {
+  final bool isAdmin;
+  MyHomePage({required this.isAdmin}); // receive the isAdmin flag
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -22,10 +23,19 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _queryAll() async {
-    // List<Perfume> allPerfumes = await dbHelper.queryAllPerfumes();
-    // setState(() {
-    //   perfumes = allPerfumes;
-    // });
+    final allRows = await dbHelper.queryAllPerfumes();
+    perfumes.clear();
+    allRows?.forEach((row) => perfumes.add(Perfume.fromMap(row)));
+    setState(() {});
+  }
+
+  void _navigateToDetail(Perfume perfume) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PerfumeDetailScreen(perfume: perfume),
+      ),
+    );
   }
 
   @override
@@ -33,29 +43,23 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Order Now'),
-        actions: [
+        actions: widget.isAdmin
+            ? [
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: () {
-              Navigator.push(
+            onPressed: () async {
+              final result = await Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MyHomePage()),
-              ).then((_) {
-                _queryAll(); // Refresh the list after adding a new perfume
-              });
-            },
-          ),
-          SizedBox(width: 10),
-          IconButton(
-            icon: Icon(Icons.shopping_cart_outlined),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CartPage()),
+                MaterialPageRoute(builder: (context) => AddPerfumeScreen()),
               );
+
+              if (result == true) {
+                _queryAll(); // Refresh the list after adding a new perfume
+              }
             },
           ),
-        ],
+        ]
+            : [],
       ),
       body: ListView.separated(
         itemCount: perfumes.length,
@@ -77,24 +81,51 @@ class _MyHomePageState extends State<MyHomePage> {
                     ],
                   ),
                 ),
-                // Text(
-                //   '\$${perfumes[index].price?.toStringAsFixed(2)}',
-                //   style: TextStyle(fontWeight: FontWeight.bold),
-                // ),
+                Text(
+                  '\$${perfumes[index].price}',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
               ],
             ),
-            onTap: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) =>
-              //         DetailedScreen(perfume: perfumes[index]),
-              //   ),
-              // );
-            },
+            onTap: () => _navigateToDetail(perfumes[index]),
+            trailing: widget.isAdmin
+                ? Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () async {
+                    final result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditPerfumeScreen(perfume: perfumes[index]),
+                      ),
+                    );
+
+                    if (result == true) {
+                      _queryAll(); // Refresh the list after updating a perfume
+                    }
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    _deletePerfume(perfumes[index].id);
+                  },
+                ),
+              ],
+            )
+                : null,
           );
         },
       ),
     );
+  }
+
+  void _deletePerfume(int? id) async {
+    if (id != null) {
+      await dbHelper.deletePerfume(id);
+      _queryAll(); // Refresh the list after deleting a perfume
+    }
   }
 }
