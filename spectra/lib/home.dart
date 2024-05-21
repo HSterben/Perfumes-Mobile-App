@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spectra/cart.dart';
 import 'models.dart';
 
 
@@ -45,7 +46,10 @@ class _MyHomePageState extends State<MyHomePage> {
           IconButton(
             icon: Icon(Icons.shopping_cart_outlined),
             onPressed: () {
-              // Handle cart action
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CartPage()),
+              );
             },
           ),
         ],
