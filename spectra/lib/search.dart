@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:spectra/cart.dart';
 import 'models.dart';
-import 'dbhelper.dart';
 
 
 class MyHomePage extends StatefulWidget {
@@ -10,9 +9,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final dbHelper = DatabaseHelper.instance;
-
-  bool adminView = true;
+  // final dbHelper = FirestoreHelper.instance;
   List<Perfume> perfumes = [];
 
   @override
