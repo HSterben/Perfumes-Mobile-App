@@ -5,7 +5,7 @@ import 'perfume_detail.dart';
 import 'add_perfume_screen.dart';
 import 'edit_perfume_screen.dart';
 import 'search.dart';
-import 'cart.dart';
+import 'cart_page.dart';
 
 class MyHomePage extends StatefulWidget {
   final bool isAdmin;
@@ -41,7 +41,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +100,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   leading: Image.network(
                     perfumes[index].imageUrl ??
                         'https://picsum.photos/250?image=9',
-                    // Add your image path here
                     width: 60,
                     height: 60,
                     fit: BoxFit.cover,
@@ -125,7 +123,6 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       Text(
                         '${perfumes[index].number}',
-                        // Adjust according to your data
                         style: TextStyle(
                           fontSize: 12,
                           color: Colors.grey,

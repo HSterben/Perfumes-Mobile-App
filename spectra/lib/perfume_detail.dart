@@ -3,13 +3,18 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'models.dart';
 import 'dbhelper.dart';
+<<<<<<< Updated upstream
 import 'ApiService.dart';
+=======
+import 'cart.dart';
+>>>>>>> Stashed changes
 
 class PerfumeDetailScreen extends StatefulWidget {
   final Perfume perfume;
 
   PerfumeDetailScreen({required this.perfume});
 
+<<<<<<< Updated upstream
   @override
   _PerfumeDetailScreenState createState() => _PerfumeDetailScreenState();
 }
@@ -26,6 +31,10 @@ class _PerfumeDetailScreenState extends State<PerfumeDetailScreen> {
 
   void _addToCart(Perfume perfume) async {
     await dbHelper.insertCartItem(perfume);
+=======
+  void _addToCart(int perfumeId) async {
+    Cart().addItem(perfumeId);
+>>>>>>> Stashed changes
     print('${perfume.name} added to cart');
   }
 
@@ -54,7 +63,11 @@ class _PerfumeDetailScreenState extends State<PerfumeDetailScreen> {
             Text('Quantity: ${widget.perfume.quantity}'),
             SizedBox(height: 20),
             ElevatedButton(
+<<<<<<< Updated upstream
               onPressed: () => _addToCart(widget.perfume),
+=======
+              onPressed: () => _addToCart(perfume.id!),
+>>>>>>> Stashed changes
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.deepPurple,
                 padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),

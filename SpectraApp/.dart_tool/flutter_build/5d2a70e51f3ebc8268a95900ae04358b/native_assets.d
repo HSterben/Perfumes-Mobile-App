@@ -1,0 +1,1 @@
+ C:\\Users\\webst\\OneDrive\\Documents\\Vanier\\Sem4\\App\ Dev\ 2\\Spectra-Perfumes-App\\SpectraApp\\.dart_tool\\flutter_build\\5d2a70e51f3ebc8268a95900ae04358b\\native_assets.yaml: 

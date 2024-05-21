@@ -4,7 +4,7 @@ import 'dbhelper.dart';
 import 'add_perfume_screen.dart';
 import 'edit_perfume_screen.dart';
 import 'perfume_detail.dart';
-import 'cart.dart';
+import 'cart_page.dart';
 
 class MySearchPage extends StatefulWidget {
   final bool isAdmin;

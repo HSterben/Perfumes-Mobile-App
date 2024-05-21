@@ -10,12 +10,12 @@ class DatabaseHelper {
   static final perfumeTable = 'Perfume_table';
   static final cartTable = 'Cart_table';
 
-  //User Columns
+  // User Columns
   static final userID = 'id';
   static final userEmail = 'email';
   static final userPassword = 'password';
 
-  //Perfume Columns
+  // Perfume Columns
   static final perfumeID = 'id';
   static final perfumeBrand = 'brand';
   static final perfumeName = 'name';
@@ -45,32 +45,26 @@ class DatabaseHelper {
 
   Future _onCreate(Database db, int version) async {
     await db.execute('''
- CREATE TABLE $userTable (
- $userID INTEGER PRIMARY KEY AUTOINCREMENT,
- $userEmail TEXT NOT NULL,
- $userPassword TEXT NOT NULL
- )
- ''');
+      CREATE TABLE $userTable (
+        $userID INTEGER PRIMARY KEY AUTOINCREMENT,
+        $userEmail TEXT NOT NULL,
+        $userPassword TEXT NOT NULL
+      )
+    ''');
     await db.execute('''
- CREATE TABLE $perfumeTable (
- $perfumeID INTEGER PRIMARY KEY AUTOINCREMENT,
- $perfumeBrand TEXT NOT NULL,
- $perfumeName TEXT NOT NULL,
- $perfumeNumber TEXT NOT NULL,
- $perfumePrice TEXT NOT NULL,
- $imageUrl TEXT NOT NULL,
- $quantity TEXT NOT NULL
- )
- ''');
+      CREATE TABLE $perfumeTable (
+        $perfumeID INTEGER PRIMARY KEY AUTOINCREMENT,
+        $perfumeBrand TEXT NOT NULL,
+        $perfumeName TEXT NOT NULL,
+        $perfumeNumber TEXT NOT NULL,
+        $perfumePrice TEXT NOT NULL,
+        $imageUrl TEXT NOT NULL,
+        $quantity TEXT NOT NULL
+      )
+    ''');
     await db.execute('''
       CREATE TABLE $cartTable (
-        perfumeID INTEGER PRIMARY KEY,
-        perfumeBrand TEXT,
-        perfumeName TEXT,
-        perfumeNumber TEXT,
-        perfumePrice TEXT,
-        imageUrl TEXT,
-        quantity TEXT
+        $perfumeID INTEGER PRIMARY KEY
       )
     ''');
   }
@@ -78,15 +72,9 @@ class DatabaseHelper {
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
       await db.execute('''
-      CREATE TABLE $cartTable (
-        $perfumeID INTEGER PRIMARY KEY,
-        $perfumeBrand TEXT,
-        $perfumeName TEXT,
-        $perfumeNumber TEXT,
-        $perfumePrice TEXT,
-        $imageUrl TEXT,
-        $quantity TEXT
-      )
+        CREATE TABLE $cartTable (
+          $perfumeID INTEGER PRIMARY KEY
+        )
       ''');
     }
   }
@@ -111,7 +99,7 @@ class DatabaseHelper {
   Future<int?> queryUserCount() async {
     Database? db = await instance.database;
     final List<Map<String, Object?>>? result =
-        await db?.rawQuery('SELECT COUNT(*) FROM $userTable');
+    await db?.rawQuery('SELECT COUNT(*) FROM $userTable');
     final List<Map<String, Object?>> nonNullableResult =
         result ?? []; // Handle null case
     return Sqflite.firstIntValue(nonNullableResult) ?? 0;
@@ -150,13 +138,13 @@ class DatabaseHelper {
     Database? db = await instance.database;
     return await db?.query(perfumeTable,
         where:
-            "$perfumeName LIKE '%$query%' OR $perfumeBrand LIKE '%$query%' OR $perfumeNumber LIKE '%$query%'");
+        "$perfumeName LIKE '%$query%' OR $perfumeBrand LIKE '%$query%' OR $perfumeNumber LIKE '%$query%'");
   }
 
   Future<int?> queryPerfumeCount() async {
     Database? db = await instance.database;
     final List<Map<String, Object?>>? result =
-        await db?.rawQuery('SELECT COUNT(*) FROM $perfumeTable');
+    await db?.rawQuery('SELECT COUNT(*) FROM $perfumeTable');
     final List<Map<String, Object?>> nonNullableResult =
         result ?? []; // Handle null case
     return Sqflite.firstIntValue(nonNullableResult) ?? 0;
@@ -178,13 +166,18 @@ class DatabaseHelper {
         ?.delete(perfumeTable, where: '$perfumeID = ?', whereArgs: [id]);
   }
 
-  Future<int?> insertCartItem(Perfume perfume) async {
+  Future<int?> insertCartItem(int perfumeId) async {
     Database? db = await instance.database;
-    return await db?.insert(cartTable, perfume.toMap());
+    return await db?.insert(cartTable, {perfumeID: perfumeId});
   }
 
   Future<List<Map<String, dynamic>>?> queryAllCartItems() async {
     Database? db = await instance.database;
     return await db?.query(cartTable);
+  }
+
+  Future<int?> deleteCartItem(int perfumeId) async {
+    Database? db = await instance.database;
+    return await db?.delete(cartTable, where: '$perfumeID = ?', whereArgs: [perfumeId]);
   }
 }
